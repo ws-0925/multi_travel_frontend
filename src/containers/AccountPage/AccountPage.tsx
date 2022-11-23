@@ -32,6 +32,9 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
     phone_number  : "",
     birthday      : "",
     about_me      : "",  
+    credit_card_number : "",
+    holder_name    : "",
+    client_address   : "",
   });
   
   useEffect(() => {
@@ -42,6 +45,9 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
     const origin_phone_number = userData.phone_number;
     const origin_birthday = userData.birthday;
     const origin_about_me = userData.about_me;
+    const origin_credit_card_number = userData.billing_data == undefined ? '' : userData.billing_data.credit_card_number;
+    const origin_holder_name = userData.billing_data != undefined ? userData.billing_data.holder_name : "";
+    const origin_client_address = userData.billing_data != undefined ? userData.billing_data.client_address : "";
     setFormData({
       name          : origin_name ? origin_name : "",
       gender        : origin_gender ? origin_gender : "",
@@ -49,12 +55,19 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
       address       : origin_address ? origin_address : "",
       phone_number  : origin_phone_number ? origin_phone_number : "",
       birthday      : origin_birthday ? origin_birthday : "",
-      about_me      : origin_about_me ? origin_about_me : "",  
+      about_me      : origin_about_me ? origin_about_me : "",
+      credit_card_number : origin_credit_card_number ? origin_credit_card_number : "",  
+      holder_name   : origin_holder_name ? origin_holder_name : "",
+      client_address   : origin_client_address ? origin_client_address : "",
     })
+
+  console.log(userData)
+
   }, [userData]);
 
-    
-  const { name, gender, email, address, phone_number, birthday, about_me} = formData;
+
+     
+  const { name, gender, email, address, phone_number, birthday, about_me, credit_card_number, holder_name, client_address} = formData;
 
   const first_name = name.split(" ")[0];
   const last_name =  name.split(" ")[1];
@@ -84,6 +97,9 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
       birthday: birthday,
       about_me: about_me,
       phone_number: phone_number,
+      credit_card_number : credit_card_number,
+      holder_name : holder_name,
+      client_address : client_address,      
     }
     updateProfile(data)(dispatch);
   } 
@@ -195,6 +211,35 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
                   name="about_me"
                   onChange={onChange} 
                 />
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <Label>Credit Card Number</Label>
+                  <Input 
+                    className="mt-1.5"
+                    value={credit_card_number} 
+                    name="credit_card_number"
+                    onChange={onChange}
+                  />
+                </div>
+                <div>
+                  <Label>Holder Name</Label>
+                  <Input 
+                    className="mt-1.5" 
+                    name="holder_name"
+                    value={holder_name}
+                    onChange={onChange}
+                  />
+                </div>
+                <div>
+                  <Label>Client Address</Label>
+                  <Input 
+                    className="mt-1.5" 
+                    name="client_address"
+                    value={client_address}
+                    onChange={onChange}
+                  />
+                </div>
               </div>
               <div className="pt-2">
                 <ButtonPrimary>Update info</ButtonPrimary>
