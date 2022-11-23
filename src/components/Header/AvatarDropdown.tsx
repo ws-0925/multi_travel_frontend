@@ -1,4 +1,5 @@
 import { Popover, Transition } from "@headlessui/react";
+import { logOut } from "state/auth/action";
 import {
   UserCircleIcon,
   ChatBubbleBottomCenterTextIcon,
@@ -10,6 +11,8 @@ import {
 import { Fragment } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "shared/Avatar/Avatar";
+import { useAppDispatch } from "store";
+
 
 const solutions = [
   {
@@ -43,7 +46,7 @@ const solutionsFoot = [
 
   {
     name: "Logout",
-    href: "##",
+    href : "/logout",
     icon: ArrowRightOnRectangleIcon,
   },
 ];

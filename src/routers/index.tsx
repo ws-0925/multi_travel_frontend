@@ -50,6 +50,7 @@ import { loadUser } from "state/auth/action";
 import store from "store";
 import setAuthToken from "utils/setAuthToken";
 import { Provider } from "react-redux";
+import LogOut from "containers/PageLogin/LogOut";
 
 export const pages: Page[] = [
   { path: "/", exact: true, component: PageHome },
@@ -111,6 +112,7 @@ export const pages: Page[] = [
   { path: "/about", component: PageAbout },
   { path: "/signup", component: PageSignUp },
   { path: "/login", component: PageLogin },
+  { path: "/logout", component: LogOut},
   { path: "/subscription", component: PageSubcription },
   //
 ];

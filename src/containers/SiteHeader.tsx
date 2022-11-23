@@ -57,6 +57,7 @@ const SiteHeader = () => {
     React.useState<SiteHeaders>("Header 1");
 
   const [isTopOfPage, setIsTopOfPage] = React.useState(window.pageYOffset < 5);
+  
   const location = useLocation();
 
   const intersectionCallback = (entries: IntersectionObserverEntry[]) => {
