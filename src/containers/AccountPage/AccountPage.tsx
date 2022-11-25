@@ -10,7 +10,7 @@ import { Helmet } from "react-helmet";
 import { useSelector } from "react-redux";
 import { AppState, useAppDispatch} from "store";
 import { updateProfile } from "state/profile/action";
-import { first } from "lodash";
+import api from "utils/api";
 
 export interface AccountPageProps {
   className?: string;
@@ -61,11 +61,8 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
       client_address   : origin_client_address ? origin_client_address : "",
     })
 
-  console.log(userData)
 
   }, [userData]);
-
-
      
   const { name, gender, email, address, phone_number, birthday, about_me, credit_card_number, holder_name, client_address} = formData;
 
@@ -104,6 +101,33 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
     updateProfile(data)(dispatch);
   } 
 
+  const [image, setImage] = useState({ preview: '', data: '' })
+
+
+  const handleFileChange = async (e: any) => {
+    e.preventDefault();
+    const img = {
+      preview: URL.createObjectURL(e.target.files[0]),
+      data: e.target.files[0],
+    }
+    setImage(img)
+  }
+  
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault() 
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    let formData = new FormData()
+    
+    formData.append('file', image.data)
+    const res = await api.post('/upload', formData, config)
+  }
+
+
   return (
     <div className={`nc-AccountPage ${className}`} data-nc-id="AccountPage">
       <Helmet>
@@ -115,7 +139,7 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
           <h2 className="text-3xl font-semibold">Account infomation</h2>
           <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
           <div className="flex flex-col md:flex-row">
-            <div className="flex-shrink-0 flex items-start">
+            <form className="flex-shrink-0 flex items-start flex-col" onSubmit={handleSubmit}>
               <div className="relative rounded-full overflow-hidden flex">
                 <Avatar sizeClass="w-32 h-32" />
                 <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-neutral-50 cursor-pointer">
@@ -137,12 +161,19 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
 
                   <span className="mt-1 text-xs">Change Image</span>
                 </div>
+                {/* image upload */}
                 <input
                   type="file"
                   className="absolute inset-0 opacity-0 cursor-pointer"
+                  accept="image/*"
+                  name="fileupload"
+                  onChange={handleFileChange}
                 />
               </div>
-            </div>
+              <div className="mt-2 ml-2 justify-center">
+                <ButtonPrimary type="submit" >Upload</ButtonPrimary>
+              </div>
+            </form>
             <form className="flex-grow mt-10 md:mt-0 md:pl-16 max-w-3xl space-y-6" action="#" method="post" onSubmit={update}>
               <div>
                 <Label>Name</Label>
@@ -156,7 +187,7 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
               {/* ---- */}
               <div>
                 <Label>Gender</Label>
-                <Select className="mt-1.5" onChange={handleSetGender}>
+                <Select className="mt-1.5" onChange={handleSetGender} value={gender}> 
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                   <option value="Other">Other</option>

@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import facebookSvg from "images/Facebook.svg";
 import twitterSvg from "images/Twitter.svg";
 import googleSvg from "images/Google.svg";
@@ -39,6 +39,16 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
   const isAuthenticated = useSelector(
     (state: AppState) => state.auth.isAuthenticated
   );
+
+  useEffect(()  => {
+    if(isAuthenticated == false) {
+      clearLocalStorage();
+    }
+  })
+
+  const clearLocalStorage = () => {
+    return localStorage.clear();
+  }
 
   const [formData, setFormData] = useState({
     email: "",

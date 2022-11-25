@@ -12,7 +12,7 @@ export interface GuestsInputProps {
   onChange?: (data: GuestsObject) => void;
   fieldClassName?: string;
   className?: string;
-  buttonSubmitHref?: PathName;
+  buttonSubmitFunction?: (data: GuestsObject) => void;
   hasButtonSubmit?: boolean;
 }
 
@@ -21,7 +21,7 @@ const GuestsInput: FC<GuestsInputProps> = ({
   onChange,
   fieldClassName = "[ nc-hero-field-padding ]",
   className = "[ nc-flex-1 ]",
-  buttonSubmitHref = "/listing-stay-map",
+  buttonSubmitFunction,
   hasButtonSubmit = true,
 }) => {
   const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(
@@ -118,7 +118,7 @@ const GuestsInput: FC<GuestsInputProps> = ({
             {/* BUTTON SUBMIT OF FORM */}
             {hasButtonSubmit && (
               <div className="pr-2 xl:pr-4">
-                <ButtonSubmit href={buttonSubmitHref} />
+                <ButtonSubmit onClick={buttonSubmitFunction} />
               </div>
             )}
           </div>

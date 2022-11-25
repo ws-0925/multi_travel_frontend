@@ -5,20 +5,27 @@ import Pagination from "shared/Pagination/Pagination";
 import TabFilters from "./TabFilters";
 import Heading2 from "components/Heading/Heading2";
 import ExperiencesCard from "components/ExperiencesCard/ExperiencesCard";
+import { AppState, useAppDispatch } from "store";
+import { useSelector } from "react-redux";
 
 export interface SectionGridFilterCardProps {
   className?: string;
   data?: StayDataType[];
 }
 
-const DEMO_DATA: ExperiencesDataType[] = DEMO_EXPERIENCES_LISTINGS.filter(
-  (_, i) => i < 8
-);
 
 const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
   className = "",
-  data = DEMO_DATA,
 }) => {
+  const dispatch = useAppDispatch();
+
+  const searchData = useSelector(
+    (state: AppState) => state.booking.experienceGetData
+  );
+
+  const DEMO_DATA: ExperiencesDataType[] = searchData;
+  var data: any[] = [];
+  data = DEMO_DATA;
   return (
     <div
       className={`nc-SectionGridFilterCard ${className}`}
@@ -40,8 +47,8 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
         <TabFilters />
       </div>
       <div className="grid grid-cols-1 gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-        {data.map((stay) => (
-          <ExperiencesCard key={stay.id} data={stay} />
+        {data.map((stay, index) => (
+          <ExperiencesCard key={index} data={stay} />
         ))}
       </div>
       <div className="flex mt-16 justify-center items-center">

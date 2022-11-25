@@ -8,7 +8,7 @@ const api = axios.create({
   baseURL: "http://localhost:5000/api",
   headers: {
     "Content-Type": "application/json",
-    // 'authorization': currentState.auth.token == '' ? localStorage.getItem('token') : currentState.auth.token
+     // 'authorization': currentState.auth.token == '' ? localStorage.getItem('token') : currentState.auth.token
   },
 });
 

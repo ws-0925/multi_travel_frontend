@@ -4,27 +4,8 @@ import GuestsInput, { GuestsInputProps } from "./GuestsInput";
 import ExperiencesDateSingleInput from "./ExperiencesDateSingleInput";
 import moment from "moment";
 import { FC } from "react";
-
-// DEFAULT DATA FOR ARCHIVE PAGE
-var defaultLocationValue = "";
-var defaultDate = moment();
-var defaultGuestValue = {
-  guestAdults: 2,
-  guestChildren: 2,
-  guestInfants: 1,
-};
-const localStorageInfo = localStorage.getItem('searchExperience');
-if (localStorageInfo != null) {
-  var experienceInfo = JSON.parse(localStorageInfo)
-  defaultLocationValue = experienceInfo.locationInputValue;
-  // defaultDate = new Date(experienceInfo.dateValue);
-  defaultGuestValue = {
-    guestAdults: experienceInfo.guestValue.guestAdults,
-    guestChildren: experienceInfo.guestValue.guestChildren,
-    guestInfants: experienceInfo.guestValue.guestInfants,
-  };
-}
-
+import { searchExperienceData } from "state/booking/action";
+import { useAppDispatch } from "store";
 
 export interface ExperiencesSearchFormProps {
   haveDefaultValue?: boolean;
@@ -39,25 +20,24 @@ const ExperiencesSearchForm: FC<ExperiencesSearchFormProps> = ({
 
   const [dateFocused, setDateFocused] = useState<boolean>(false);
   //
-
   useEffect(() => {
-    if (haveDefaultValue) {
-      setdateValue(defaultDate);
-      setLocationInputValue(defaultLocationValue);
-      setGuestValue(defaultGuestValue);
-    }else {
-      var data = {
-        dateValue: dateValue,
-        locationInputValue: locationInputValue,
-        guestValue: guestValue
-      };
-      localStorage.setItem('searchExperience', JSON.stringify(data))
-    }
+    
   });
 
   //
 
   const renderForm = () => {
+    const dispatch = useAppDispatch();
+
+    const searchData = async (e: any) => {
+      e.preventDefault();
+      const data = {
+        dateValue: dateValue,
+        locationInputValue: locationInputValue,
+        guestValue: guestValue
+      }
+      searchExperienceData(data)(dispatch);
+    }
     return (
       <form className="w-full relative mt-8 flex flex-col md:flex-row  rounded-3xl md:rounded-full shadow-xl dark:shadow-2xl bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700  md:divide-y-0">
         <LocationInput
@@ -81,7 +61,7 @@ const ExperiencesSearchForm: FC<ExperiencesSearchFormProps> = ({
           defaultValue={guestValue}
           onChange={(data) => setGuestValue(data)}
           className="flex-[1.5]"
-          buttonSubmitHref="/listing-experiences"
+          buttonSubmitFunction={() => searchData}
         />
       </form>
     );

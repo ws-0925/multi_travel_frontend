@@ -29,11 +29,6 @@ export const register = (data: any) => async (dispatch: AppDispatch) => {
     loadUser()(dispatch);
   } catch (error: any) {
     const errors = error.response.data.errors;
-    if (errors) {
-      errors.forEach((error: { msg: string }) =>
-        dispatch(setAlert(error.msg, "danger"))
-      );
-    }
     dispatch(registerError());
   }
 };
@@ -45,12 +40,6 @@ export const login = (data: any) => async (dispatch: AppDispatch) => {
       loadUser()(dispatch);
     } catch (error: any) {
       const errors = error.response.data.errors;
-
-      if (errors) {
-        errors.forEach((error: { msg: string }) =>
-          dispatch(setAlert(error.msg, "danger"))
-        );
-      }
       dispatch(loginError());
     }
   };

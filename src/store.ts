@@ -4,12 +4,14 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 // user defined
 import authReducer from "./state/auth/reducer";
 import alretReducer from "./state/alert/reducer";
-import profileReducer from "./state/profile/reducer";
+// import profileReducer from "./state/profile/reducer";
 import setAuthToken from "./utils/setAuthToken";
+import bookingReducer from "./state/booking/reducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
   alert:  alretReducer,
+  booking : bookingReducer,
   // profile: profileReducer,
 });
 

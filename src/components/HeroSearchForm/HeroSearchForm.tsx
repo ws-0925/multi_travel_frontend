@@ -48,6 +48,7 @@ const HeroSearchForm: FC<HeroSearchFormProps> = ({
 
   const renderForm = () => {
     const isArchivePage = !!currentPage && !!currentTab;
+    
     switch (tabActive) {
       case "Stays":
         return <StaySearchForm haveDefaultValue={isArchivePage} />;
