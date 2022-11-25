@@ -110,7 +110,7 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
       email: email,
       country: country,
       city: city,
-      avatar: data[0].filename,
+      avatar: data[0]?.filename,
       birthday: birthday,
       about_me: about_me,
       phone_number: phone_number,
@@ -121,8 +121,6 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
     updateProfile(userInfo)(dispatch);
   }
 
-
-  console.log(image);
   const handleFileChange = async (e: any) => {
     e.preventDefault();
 
@@ -134,7 +132,6 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
       preview: URL.createObjectURL(e.target.files[0]),
       data: e.target.files[0],
     }
-    console.log(img);
     setImage(img)
   }
 

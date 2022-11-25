@@ -25,7 +25,6 @@ const Avatar: FC<AvatarProps> = ({
   hasCheckedClass = "w-4 h-4 -top-0.5 -right-0.5",
 }) => {
 
-
   const url = imgUrl || defaultAvatar;
   const name = userName || "John Doe";
   const _setBgColor = (name: string) => {

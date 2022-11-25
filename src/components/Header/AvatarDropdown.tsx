@@ -10,9 +10,10 @@ import {
 } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { AppState } from "store";
 import Avatar from "shared/Avatar/Avatar";
-import { useAppDispatch } from "store";
-
+import { ImagePath } from "utils";
 
 const solutions = [
   {
@@ -52,6 +53,11 @@ const solutionsFoot = [
 ];
 
 export default function AvatarDropdown() {
+
+  const user = useSelector(
+    (state: AppState) => state.auth.user
+  )
+  
   return (
     <div className="AvatarDropdown">
       <Popover className="relative">
@@ -60,7 +66,7 @@ export default function AvatarDropdown() {
             <Popover.Button
               className={`inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
             >
-              <Avatar sizeClass="w-8 h-8 sm:w-9 sm:h-9" />
+              <Avatar imgUrl={user?.avatar ? ImagePath(user?.avatar) : ""} sizeClass="w-8 h-8 sm:w-9 sm:h-9" />
             </Popover.Button>
             <Transition
               as={Fragment}
@@ -115,3 +121,4 @@ export default function AvatarDropdown() {
     </div>
   );
 }
+

@@ -252,7 +252,7 @@ const PageSignUp: FC<PageSignUpProps> = ({ className = "" }) => {
               <PhoneInput
                 placeholder="Enter phone number"
                 value={phone_number}
-                onChange={handleSetPhoneNumber}
+                // onChange={handleSetPhoneNumber}
               />
             </label>
             <ButtonPrimary type="submit">Continue</ButtonPrimary>

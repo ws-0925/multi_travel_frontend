@@ -1,4 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
+
 import {
   authSuccess,
   authError,
@@ -74,3 +75,5 @@ export default createReducer<Auth>(initialState, (builder) =>
     .addCase(profileUpdateError, (state) => state)
     .addDefaultCase((state) => state)
 );
+
+

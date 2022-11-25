@@ -4,9 +4,11 @@ import SectionHeroArchivePage from "components/SectionHeroArchivePage/SectionHer
 import SectionSliderNewCategories from "components/SectionSliderNewCategories/SectionSliderNewCategories";
 import SectionSubscribe2 from "components/SectionSubscribe2/SectionSubscribe2";
 import { TaxonomyType } from "data/types";
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import SectionGridFilterCard from "./SectionGridFilterCard";
 import { Helmet } from "react-helmet";
+import { Alert } from "shared/Alert/Alert";
+
 
 export interface ListingExperiencesPageProps {
   className?: string;
@@ -68,10 +70,14 @@ const DEMO_CATS: TaxonomyType[] = [
 const ListingExperiencesPage: FC<ListingExperiencesPageProps> = ({
   className = "",
 }) => {
+
+  useEffect(() => {
+    console.log("here");
+  })
   return (
     <div
-      className={`nc-ListingExperiencesPage relative overflow-hidden ${className}`}
-      data-nc-id="ListingExperiencesPage"
+    className={`nc-ListingExperiencesPage relative overflow-hidden ${className}`}
+    data-nc-id="ListingExperiencesPage"
     >
       <Helmet>
         <title>Chisfis || Booking React Template</title>

@@ -12,6 +12,9 @@ export const Alert: React.FC<AlertProps> = ({
   containerClassName = "",
   type = "default",
 }) => {
+
+
+
   let classes = containerClassName;
   switch (type) {
     case "default":
@@ -32,6 +35,7 @@ export const Alert: React.FC<AlertProps> = ({
     default:
       break;
   }
+
 
   return (
     <div
