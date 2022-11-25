@@ -1,5 +1,7 @@
 import Label from "components/Label/Label";
-import { FC, useState ,useEffect} from "react";
+import { FC, useState, useEffect } from "react";
+import axios from "axios";
+
 import Avatar from "shared/Avatar/Avatar";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import Input from "shared/Input/Input";
@@ -8,9 +10,10 @@ import Textarea from "shared/Textarea/Textarea";
 import CommonLayout from "./CommonLayout";
 import { Helmet } from "react-helmet";
 import { useSelector } from "react-redux";
-import { AppState, useAppDispatch} from "store";
+import { AppState, useAppDispatch } from "store";
 import { updateProfile } from "state/profile/action";
 import api from "utils/api";
+import { ImagePath } from "utils/index";
 
 export interface AccountPageProps {
   className?: string;
@@ -25,18 +28,20 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
   );
 
   const [formData, setFormData] = useState({
-    name          : "",
-    gender        : "",
-    email         : "",
-    address       : "",
-    phone_number  : "",
-    birthday      : "",
-    about_me      : "",  
-    credit_card_number : "",
-    holder_name    : "",
-    client_address   : "",
+    name: "",
+    gender: "",
+    email: "",
+    address: "",
+    phone_number: "",
+    birthday: "",
+    about_me: "",
+    credit_card_number: "",
+    holder_name: "",
+    client_address: "",
   });
-  
+
+  const [image, setImage] = useState({ preview: '', data: '' })
+
   useEffect(() => {
     const origin_name = userData.first_name + " " + userData.last_name;
     const origin_address = userData.country + " " + userData.city;
@@ -49,84 +54,89 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
     const origin_holder_name = userData.billing_data != undefined ? userData.billing_data.holder_name : "";
     const origin_client_address = userData.billing_data != undefined ? userData.billing_data.client_address : "";
     setFormData({
-      name          : origin_name ? origin_name : "",
-      gender        : origin_gender ? origin_gender : "",
-      email         : origin_email ? origin_email : "",
-      address       : origin_address ? origin_address : "",
-      phone_number  : origin_phone_number ? origin_phone_number : "",
-      birthday      : origin_birthday ? origin_birthday : "",
-      about_me      : origin_about_me ? origin_about_me : "",
-      credit_card_number : origin_credit_card_number ? origin_credit_card_number : "",  
-      holder_name   : origin_holder_name ? origin_holder_name : "",
-      client_address   : origin_client_address ? origin_client_address : "",
+      name: origin_name ? origin_name : "",
+      gender: origin_gender ? origin_gender : "",
+      email: origin_email ? origin_email : "",
+      address: origin_address ? origin_address : "",
+      phone_number: origin_phone_number ? origin_phone_number : "",
+      birthday: origin_birthday ? origin_birthday : "",
+      about_me: origin_about_me ? origin_about_me : "",
+      credit_card_number: origin_credit_card_number ? origin_credit_card_number : "",
+      holder_name: origin_holder_name ? origin_holder_name : "",
+      client_address: origin_client_address ? origin_client_address : "",
     })
-
-
+    setImage({ preview: (userData?.avatar ? ImagePath(userData?.avatar) : ""), data: image.data })
   }, [userData]);
-     
-  const { name, gender, email, address, phone_number, birthday, about_me, credit_card_number, holder_name, client_address} = formData;
+
+
+
+  const { name, gender, email, address, phone_number, birthday, about_me, credit_card_number, holder_name, client_address } = formData;
 
   const first_name = name.split(" ")[0];
-  const last_name =  name.split(" ")[1];
+  const last_name = name.split(" ")[1];
 
   const country = address.split(" ")[0];
-  const city  = address.split(" ")[1];
+  const city = address.split(" ")[1];
 
   const onChange = (e: any) =>
-  setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSetGender = (e: any) => {
-    setFormData({...formData, gender : e.target.value});
+    setFormData({ ...formData, gender: e.target.value });
   }
 
   const handleSetBirthday = (e: any) => {
-    setFormData({...formData, birthday : e.target.value});
+    setFormData({ ...formData, birthday: e.target.value });
   }
-  const update = async (e:any) => {
+
+  const update = async (e: any) => {
     e.preventDefault();
-    const data = {
-      first_name: first_name,
-      last_name:  last_name,
-      gender: gender,
-      email:  email,
-      country:  country,
-      city: city,
-      birthday: birthday,
-      about_me: about_me,
-      phone_number: phone_number,
-      credit_card_number : credit_card_number,
-      holder_name : holder_name,
-      client_address : client_address,      
-    }
-    updateProfile(data)(dispatch);
-  } 
 
-  const [image, setImage] = useState({ preview: '', data: '' })
-
-
-  const handleFileChange = async (e: any) => {
-    e.preventDefault();
-    const img = {
-      preview: URL.createObjectURL(e.target.files[0]),
-      data: e.target.files[0],
-    }
-    setImage(img)
-  }
-  
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault() 
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     };
-    let formData = new FormData()
-    
-    formData.append('file', image.data)
-    const res = await api.post('/upload', formData, config)
+    const formData = new FormData();
+
+    formData.append("image", image.data);
+
+    const { data } = await api.post('http://localhost:5000/api/upload', formData, config);
+
+    const userInfo = {
+      first_name: first_name,
+      last_name: last_name,
+      gender: gender,
+      email: email,
+      country: country,
+      city: city,
+      avatar: data[0].filename,
+      birthday: birthday,
+      about_me: about_me,
+      phone_number: phone_number,
+      credit_card_number: credit_card_number,
+      holder_name: holder_name,
+      client_address: client_address,
+    }
+    updateProfile(userInfo)(dispatch);
   }
 
+
+  console.log(image);
+  const handleFileChange = async (e: any) => {
+    e.preventDefault();
+
+    if (!e.target.files?.length) {
+      return;
+    }
+
+    const img = {
+      preview: URL.createObjectURL(e.target.files[0]),
+      data: e.target.files[0],
+    }
+    console.log(img);
+    setImage(img)
+  }
 
   return (
     <div className={`nc-AccountPage ${className}`} data-nc-id="AccountPage">
@@ -139,9 +149,9 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
           <h2 className="text-3xl font-semibold">Account infomation</h2>
           <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
           <div className="flex flex-col md:flex-row">
-            <form className="flex-shrink-0 flex items-start flex-col" onSubmit={handleSubmit}>
+            <div className="flex-shrink-0 flex items-start flex-col" >
               <div className="relative rounded-full overflow-hidden flex">
-                <Avatar sizeClass="w-32 h-32" />
+                <Avatar imgUrl={image.preview} sizeClass="w-32 h-32" />
                 <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-neutral-50 cursor-pointer">
                   <svg
                     width="30"
@@ -170,35 +180,32 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
                   onChange={handleFileChange}
                 />
               </div>
-              <div className="mt-2 ml-2 justify-center">
-                <ButtonPrimary type="submit" >Upload</ButtonPrimary>
-              </div>
-            </form>
+            </div>
             <form className="flex-grow mt-10 md:mt-0 md:pl-16 max-w-3xl space-y-6" action="#" method="post" onSubmit={update}>
               <div>
                 <Label>Name</Label>
-                <Input 
-                  className="mt-1.5" 
+                <Input
+                  className="mt-1.5"
                   value={name}
                   name="name"
                   onChange={onChange}
-                  />
+                />
               </div>
               {/* ---- */}
               <div>
                 <Label>Gender</Label>
-                <Select className="mt-1.5" onChange={handleSetGender} value={gender}> 
+                <Select className="mt-1.5" onChange={handleSetGender} value={gender}>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                   <option value="Other">Other</option>
                 </Select>
-              </div>  
+              </div>
               {/* ---- */}
               <div>
                 <Label>Email</Label>
-                <Input 
-                  className="mt-1.5" 
-                  value={email} 
+                <Input
+                  className="mt-1.5"
+                  value={email}
                   name="email"
                   onChange={onChange}
                 />
@@ -217,46 +224,46 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
               {/* ---- */}
               <div>
                 <Label>Addess</Label>
-                <Input 
-                  className="mt-1.5" 
-                  value={address} 
+                <Input
+                  className="mt-1.5"
+                  value={address}
                   name="address"
-                  onChange={onChange}  
+                  onChange={onChange}
                 />
               </div>
               {/* ---- */}
               <div>
                 <Label>Phone number</Label>
-                <Input 
-                  className="mt-1.5" 
-                  defaultValue="003 888 232" 
+                <Input
+                  className="mt-1.5"
+                  defaultValue="003 888 232"
                   name="phone_number"
                 />
               </div>
               {/* ---- */}
               <div>
                 <Label>About you</Label>
-                <Textarea 
-                  className="mt-1.5" 
+                <Textarea
+                  className="mt-1.5"
                   value={about_me}
                   name="about_me"
-                  onChange={onChange} 
+                  onChange={onChange}
                 />
               </div>
               <div className="grid grid-cols-3 gap-3">
                 <div>
                   <Label>Credit Card Number</Label>
-                  <Input 
+                  <Input
                     className="mt-1.5"
-                    value={credit_card_number} 
+                    value={credit_card_number}
                     name="credit_card_number"
                     onChange={onChange}
                   />
                 </div>
                 <div>
                   <Label>Holder Name</Label>
-                  <Input 
-                    className="mt-1.5" 
+                  <Input
+                    className="mt-1.5"
                     name="holder_name"
                     value={holder_name}
                     onChange={onChange}
@@ -264,8 +271,8 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
                 </div>
                 <div>
                   <Label>Client Address</Label>
-                  <Input 
-                    className="mt-1.5" 
+                  <Input
+                    className="mt-1.5"
                     name="client_address"
                     value={client_address}
                     onChange={onChange}

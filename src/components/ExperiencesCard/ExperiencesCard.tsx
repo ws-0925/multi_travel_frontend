@@ -20,7 +20,7 @@ const DEMO_DATA: ExperiencesDataType = DEMO_EXPERIENCES_LISTINGS[0];
 const ExperiencesCard: FC<ExperiencesCardProps> = ({
   size = "default",
   className = "",
-  data = DEMO_DATA,
+  data,
   ratioClass = "aspect-w-3 aspect-h-3",
 }) => {
   const {
@@ -35,7 +35,7 @@ const ExperiencesCard: FC<ExperiencesCardProps> = ({
     reviewStart,
     reviewCount,
     id,
-  } = data;
+  } = data || DEMO_DATA;
 
   const renderSliderGallery = () => {
     return (
