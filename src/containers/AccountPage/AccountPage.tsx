@@ -50,9 +50,9 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
     const origin_phone_number = userData.phone_number;
     const origin_birthday = userData.birthday;
     const origin_about_me = userData.about_me;
-    const origin_credit_card_number = userData.billing_data == undefined ? '' : userData.billing_data.credit_card_number;
-    const origin_holder_name = userData.billing_data != undefined ? userData.billing_data.holder_name : "";
-    const origin_client_address = userData.billing_data != undefined ? userData.billing_data.client_address : "";
+    const origin_credit_card_number = userData.billing_data === undefined ? '' : userData.billing_data.credit_card_number;
+    const origin_holder_name = userData.billing_data !== undefined ? userData.billing_data.holder_name : "";
+    const origin_client_address = userData.billing_data !== undefined ? userData.billing_data.client_address : "";
     setFormData({
       name: origin_name ? origin_name : "",
       gender: origin_gender ? origin_gender : "",

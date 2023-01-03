@@ -14,6 +14,9 @@ import Avatar from "shared/Avatar/Avatar";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
 import SocialsList from "shared/SocialsList/SocialsList";
 import { Helmet } from "react-helmet";
+import { useSelector } from "react-redux";
+import { AppState } from "store";
+import { ImagePath } from "utils";
 
 export interface AuthorPageProps {
   className?: string;
@@ -22,6 +25,9 @@ export interface AuthorPageProps {
 const AuthorPage: FC<AuthorPageProps> = ({ className = "" }) => {
   let [categories] = useState(["Stays", "Experiences", "Car for rent"]);
 
+  const user = useSelector(
+    (state: AppState) => state.auth.user
+  )
   const renderSidebar = () => {
     return (
       <div className=" w-full flex flex-col items-center text-center sm:rounded-2xl sm:border border-neutral-200 dark:border-neutral-700 space-y-6 sm:space-y-7 px-0 sm:p-6 xl:p-8">
@@ -29,11 +35,12 @@ const AuthorPage: FC<AuthorPageProps> = ({ className = "" }) => {
           hasChecked
           hasCheckedClass="w-6 h-6 -top-0.5 right-2"
           sizeClass="w-28 h-28"
+          imgUrl={user?.avatar ? ImagePath(user?.avatar) : ""} 
         />
 
         {/* ---- */}
         <div className="space-y-3 text-center flex flex-col items-center">
-          <h2 className="text-3xl font-semibold">Kevin Francis</h2>
+          <h2 className="text-3xl font-semibold">{user?.first_name + " " + user?.last_name}</h2>
           <StartRating className="!text-base" />
         </div>
 

@@ -18,7 +18,7 @@ import { ImagePath } from "utils";
 const solutions = [
   {
     name: "Account",
-    href: "/author",
+    href: "/account",
     icon: UserCircleIcon,
   },
   {

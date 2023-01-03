@@ -41,7 +41,7 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
   );
 
   useEffect(()  => {
-    if(isAuthenticated == false) {
+    if(isAuthenticated === false) {
       clearLocalStorage();
     }
   })
@@ -69,7 +69,7 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
     login(data)(dispatch);
   };
 
-  if(isAuthenticated == true) {
+  if(isAuthenticated === true) {
     return <Navigate to="/" />;
   }
 
