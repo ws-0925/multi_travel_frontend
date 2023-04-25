@@ -14,7 +14,7 @@ export const setAlert =
   (msg: string, type: string, timeout = 5000) =>
   (dispatch: AppDispatch) => {
     const id = uuidv4();
-
     dispatch(addAlert({ msg, type, id }));
+
     setTimeout(() => dispatch(removeAlert(id)), timeout);
   };
